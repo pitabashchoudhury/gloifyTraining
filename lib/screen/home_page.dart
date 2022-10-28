@@ -27,6 +27,7 @@ class _HomePageState extends State<HomePage> {
     final width = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
           elevation: 0.0,
           backgroundColor: Colors.cyanAccent,
@@ -45,7 +46,7 @@ class _HomePageState extends State<HomePage> {
         ),
         body: SingleChildScrollView(
           child: SizedBox(
-            height: height,
+            // height: height,
             width: width,
             child: Wrap(
               direction: Axis.vertical,
@@ -74,7 +75,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     child: SizedBox(
                       width: width * 0.9,
-                      height: height * 0.9,
+                      //height: height * 0.9,
                       //color: Colors.red,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -95,12 +96,12 @@ class _HomePageState extends State<HomePage> {
                           const SizedBox(
                             height: 20,
                           ),
-// bubu
+                          // dropdown
                           Container(
                             width: width,
                             padding: const EdgeInsets.only(
-                              left: 8,
-                              top: 8,
+                              left: 20,
+                              right: 10,
                             ),
                             decoration: BoxDecoration(
                               color: Colors.grey[200],
@@ -151,23 +152,108 @@ class _HomePageState extends State<HomePage> {
                               },
                             ),
                           ),
-                          //bubu
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
-                              shadowColor: Colors.blueGrey,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                          //dropdown
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          // location Lane
+                          Container(
+                            width: width,
+                            height: height * 0.7 / 10,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(10),
+                              shape: BoxShape.rectangle,
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                const Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 20),
+                                    child: Text(
+                                      "Tap on  icon to fetch current location",
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                  alignment: Alignment.topRight,
+                                  highlightColor: Colors.red,
+                                  tooltip: "Tap",
+                                  splashRadius: 10.0,
+                                  icon: const Icon(
+                                    Icons.location_on,
+                                  ),
+                                  onPressed: () {},
+                                ),
+                              ],
+                            ),
+                          ),
+                          // location Lane
+                          const SizedBox(
+                            height: 20,
+                          ),
+
+                          SizedBox(
+                            width: width,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green,
+                                shadowColor: Colors.blueGrey,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              onPressed: () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(_chosenValue!),
+                                  ),
+                                );
+                              },
+                              child: const Text('Insert'),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          TextButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                Colors.greenAccent,
+                              ),
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                Colors.red,
                               ),
                             ),
                             onPressed: () {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(_chosenValue!),
+                                const SnackBar(
+                                  content: Text(
+                                    'content',
+                                  ),
                                 ),
                               );
                             },
-                            child: const Text('Insert'),
+                            child: Container(
+                              width: width / 2,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 1,
+                                  color: Colors.transparent,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'See Details',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
                         ],
                       ),
