@@ -10,12 +10,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String? _chosenValue;
   TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
     nameController.dispose();
+    emailController.dispose();
   }
 
   @override
@@ -87,19 +90,83 @@ class _HomePageState extends State<HomePage> {
                           textFieldDesign(
                             label: 'Email',
                             hint: 'Enter Your Email...',
-                            controller: nameController,
+                            controller: emailController,
                           ),
                           const SizedBox(
                             height: 20,
                           ),
+// bubu
+                          Container(
+                            width: width,
+                            padding: const EdgeInsets.only(
+                              left: 8,
+                              top: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: DropdownButton<String>(
+                              menuMaxHeight: 250,
+                              borderRadius: BorderRadius.circular(10),
+                              underline: Container(),
+                              icon: const Icon(
+                                Icons.arrow_downward_outlined,
+                              ),
+                              iconEnabledColor: Colors.grey,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 15,
+                              ),
+                              dropdownColor: Colors.white,
+                              isExpanded: true,
+                              elevation: 0,
+                              value: _chosenValue,
+                              items: <String>[
+                                'Thriller Movies',
+                                'Drama Movies',
+                                'Comedy Movies',
+                                'Horor Movies',
+                                'Crime Movies',
+                                'Documentary Movies',
+                                'Multiplex movies',
+                              ].map<DropdownMenuItem<String>>((value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              hint: const Text(
+                                "Choose your movie type..",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w100,
+                                ),
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  _chosenValue = value;
+                                });
+                              },
+                            ),
+                          ),
+                          //bubu
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                shadowColor: Colors.blueGrey,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                )),
-                            onPressed: () {},
+                              backgroundColor: Colors.green,
+                              shadowColor: Colors.blueGrey,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            onPressed: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(_chosenValue!),
+                                ),
+                              );
+                            },
                             child: const Text('Insert'),
                           ),
                         ],
