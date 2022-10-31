@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_location_weather_form/bloc/bloc/detail_bloc.dart';
 import 'package:flutter_location_weather_form/widgets/textfield_design.dart';
 
 class HomePage extends StatefulWidget {
@@ -48,11 +50,11 @@ class _HomePageState extends State<HomePage> {
           child: SizedBox(
             // height: height,
             width: width,
-            child: Wrap(
-              direction: Axis.vertical,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              alignment: WrapAlignment.start,
-              runAlignment: WrapAlignment.center,
+            child: Column(
+              // direction: Axis.vertical,
+              // crossAxisAlignment: WrapCrossAlignment.center,
+              // alignment: WrapAlignment.start,
+              // runAlignment: WrapAlignment.center,
               children: <Widget>[
                 const Padding(
                   padding: EdgeInsets.all(10.0),
@@ -68,7 +70,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                Expanded(
+                SizedBox(
                   child: Padding(
                     padding: const EdgeInsets.only(
                       top: 10,
@@ -204,11 +206,19 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               onPressed: () {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(_chosenValue!),
-                                  ),
-                                );
+                                // ScaffoldMessenger.of(context).showSnackBar(
+                                //   SnackBar(
+                                //     content: Text(_chosenValue!),
+                                //   ),
+                                // );
+
+                                context.read<DetailBloc>().add(
+                                      AddDetailEvent(
+                                          email: emailController.text,
+                                          name: nameController.text,
+                                          movie: _chosenValue,
+                                          location: 'BBSR'),
+                                    );
                               },
                               child: const Text('Insert'),
                             ),
@@ -234,25 +244,29 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               );
                             },
-                            child: Container(
-                              width: width / 2,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  width: 1,
-                                  color: Colors.transparent,
-                                ),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  'See Details',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
+                            child: BlocBuilder<DetailBloc, DetailState>(
+                              builder: (context, state) {
+                                return Container(
+                                  width: width / 2,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: 1,
+                                      color: Colors.transparent,
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
-                                ),
-                              ),
+                                  child: Center(
+                                    child: Text(
+                                      state.movie.toString(),
+                                      style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                           ),
                         ],
