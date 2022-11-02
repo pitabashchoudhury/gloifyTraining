@@ -23,12 +23,12 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Location',
-      debugShowCheckedModeBanner: false,
-      home: BlocProvider(
-        create: (context) => DetailBloc(),
-        child: const HomePage(),
+    return BlocProvider(
+      create: (BuildContext context) => DetailBloc(),
+      child: const MaterialApp(
+        title: 'Location',
+        debugShowCheckedModeBanner: false,
+        home: HomePage(),
       ),
     );
   }

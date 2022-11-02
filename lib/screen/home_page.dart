@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_location_weather_form/bloc/bloc/detail_bloc.dart';
+import 'package:flutter_location_weather_form/screen/detail_page.dart';
 import 'package:flutter_location_weather_form/widgets/textfield_design.dart';
 
 class HomePage extends StatefulWidget {
@@ -211,14 +212,23 @@ class _HomePageState extends State<HomePage> {
                                 //     content: Text(_chosenValue!),
                                 //   ),
                                 // );
-
-                                context.read<DetailBloc>().add(
-                                      AddDetailEvent(
-                                          email: emailController.text,
-                                          name: nameController.text,
-                                          movie: _chosenValue,
-                                          location: 'BBSR'),
-                                    );
+                                if (_chosenValue == null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Choose movie',
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  context.read<DetailBloc>().add(
+                                        AddDetailEvent(
+                                            email: emailController.text,
+                                            name: nameController.text,
+                                            movie: _chosenValue,
+                                            location: 'BBSR'),
+                                      );
+                                }
                               },
                               child: const Text('Insert'),
                             ),
@@ -236,11 +246,16 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             onPressed: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'content',
-                                  ),
+                              // ScaffoldMessenger.of(context).showSnackBar(
+                              //   const SnackBar(
+                              //     content: Text(
+                              //       'content',
+                              //     ),
+                              //   ),
+                              // );
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const DetailPage(),
                                 ),
                               );
                             },
