@@ -5,6 +5,7 @@ import 'package:flutter_location_weather_form/bloc/bloc/detail_bloc.dart';
 import 'package:flutter_location_weather_form/repository/current_location.dart';
 import 'package:flutter_location_weather_form/screen/detail_page.dart';
 import 'package:flutter_location_weather_form/widgets/textfield_design.dart';
+import 'package:geolocator/geolocator.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,6 +18,12 @@ class _HomePageState extends State<HomePage> {
   String? _chosenValue;
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  String? location = '';
+  @override
+  void initState() {
+    super.initState();
+    location = "Tap on Icon to fetch location";
+  }
 
   @override
   void dispose() {
@@ -171,11 +178,11 @@ class _HomePageState extends State<HomePage> {
                             ),
                             child: Row(
                               children: <Widget>[
-                                const Expanded(
+                                Expanded(
                                   child: Padding(
-                                    padding: EdgeInsets.only(left: 20),
+                                    padding: const EdgeInsets.only(left: 20),
                                     child: Text(
-                                      "Tap on  icon to fetch current location",
+                                      location!,
                                     ),
                                   ),
                                 ),
@@ -188,7 +195,31 @@ class _HomePageState extends State<HomePage> {
                                     Icons.location_on,
                                   ),
                                   onPressed: () async {
-                                    currentLocation();
+                                    LocationPermission permission;
+                                    permission =
+                                        await Geolocator.checkPermission();
+
+                                    if (permission ==
+                                        LocationPermission.denied) {
+                                      permission =
+                                          await Geolocator.requestPermission();
+                                    } else if (permission ==
+                                        LocationPermission.whileInUse) {
+                                      String k = await currentLocation();
+
+                                      setState(() {
+                                        location = k;
+                                      });
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'User Denied',
+                                          ),
+                                        ),
+                                      );
+                                    }
                                   },
                                 ),
                               ],

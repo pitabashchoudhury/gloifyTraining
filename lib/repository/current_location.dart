@@ -1,7 +1,7 @@
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
-Future<void> currentLocation() async {
+Future<String> currentLocation() async {
   List<Placemark> placemarks;
   Placemark? place;
   try {
@@ -13,10 +13,10 @@ Future<void> currentLocation() async {
           await placemarkFromCoordinates(position.latitude, position.longitude);
       place = placemarks[0];
     }
-
-    print(place!.locality);
+    return "${place!.street},${place!.locality}, ${place!.postalCode}, ${place!.country}";
+    // print(place!.locality);
   } catch (Exception) {
-    print("error in location fetching");
+    return "error in location fetching";
   }
   // return "${place!.locality}";
 }
