@@ -31,8 +31,9 @@ class _DetailPageState extends State<DetailPage> {
                 },
               ),
             ),
-            Text(
-              currentLocation(),
+            const Text(
+              // currentLocation(),
+              "bubu",
             ),
           ],
         ),

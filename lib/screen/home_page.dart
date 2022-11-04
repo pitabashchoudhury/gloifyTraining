@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_location_weather_form/bloc/bloc/detail_bloc.dart';
+import 'package:flutter_location_weather_form/repository/current_location.dart';
 import 'package:flutter_location_weather_form/screen/detail_page.dart';
 import 'package:flutter_location_weather_form/widgets/textfield_design.dart';
 
@@ -186,7 +187,9 @@ class _HomePageState extends State<HomePage> {
                                   icon: const Icon(
                                     Icons.location_on,
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    currentLocation();
+                                  },
                                 ),
                               ],
                             ),
