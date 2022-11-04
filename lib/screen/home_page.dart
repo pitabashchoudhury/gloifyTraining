@@ -34,6 +34,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print("loading");
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return SafeArea(
@@ -203,7 +204,8 @@ class _HomePageState extends State<HomePage> {
                                         LocationPermission.denied) {
                                       permission =
                                           await Geolocator.requestPermission();
-                                    } else if (permission ==
+                                    }
+                                    if (permission ==
                                         LocationPermission.whileInUse) {
                                       String k = await currentLocation();
 
@@ -257,10 +259,11 @@ class _HomePageState extends State<HomePage> {
                                 } else {
                                   context.read<DetailBloc>().add(
                                         AddDetailEvent(
-                                            email: emailController.text,
-                                            name: nameController.text,
-                                            movie: _chosenValue,
-                                            location: 'BBSR'),
+                                          email: emailController.text,
+                                          name: nameController.text,
+                                          movie: _chosenValue,
+                                          location: location,
+                                        ),
                                       );
                                 }
                               },

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_location_weather_form/bloc/bloc/detail_bloc.dart';
-import 'package:flutter_location_weather_form/repository/current_location.dart';
 
 class DetailPage extends StatefulWidget {
   const DetailPage({super.key});
