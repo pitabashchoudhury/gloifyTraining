@@ -38,9 +38,7 @@ class _MainPageState extends State<MainPage> {
 
       //  print(position);
       _getAddressFromLatLng();
-    }).catchError((e) {
-      print(e);
-    });
+    }).catchError((e) {});
   }
 
   _getAddressFromLatLng() async {
@@ -64,9 +62,7 @@ class _MainPageState extends State<MainPage> {
           loaded = true;
         });
       }
-    } catch (e) {
-      print("bubu exception");
-    }
+    } catch (e) {}
   }
 
   @override
@@ -225,8 +221,6 @@ class _MainPageState extends State<MainPage> {
                                 emailController.text,
                                 _currentAddress!,
                               );
-                              print(
-                                  "${nameController.text},${emailController.text},${_currentAddress!}");
                             },
                             child: const Text('Insert'),
                           ),
