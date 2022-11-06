@@ -26,7 +26,7 @@ class _MyAppState extends State<MyApp> {
     return BlocProvider(
       create: (BuildContext context) => DetailBloc(),
       child: const MaterialApp(
-        title: 'Location',
+        title: 'My Portal',
         debugShowCheckedModeBanner: false,
         home: HomePage(),
       ),

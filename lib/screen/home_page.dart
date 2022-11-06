@@ -34,7 +34,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print("loading");
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return SafeArea(
@@ -213,11 +212,12 @@ class _HomePageState extends State<HomePage> {
                                         location = k;
                                       });
                                     } else {
+                                      // ignore: use_build_context_synchronously
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         const SnackBar(
                                           content: Text(
-                                            'User Denied',
+                                            'User Blocked',
                                           ),
                                         ),
                                       );
