@@ -5,10 +5,10 @@ part 'weatherbloc_event.dart';
 part 'weatherbloc_state.dart';
 
 class WeatherblocBloc extends Bloc<WeatherblocEvent, WeatherblocState> {
-  WeatherblocBloc()
-      : super(WeatherblocState(weather: Weather(main: Main(pressure: 2)))) {
+  WeatherblocBloc() : super(WeatherblocState(weather: Weather())) {
     on<WeatherEvent>((event, emit) async {
-      Weather? weather = await WeatherClient().getCurrentWeather("bhubaneswar");
+      Weather? weather = await WeatherClient().getCurrentWeather(event.place);
+
       emit(
         state.copyWith(
           weather: weather,

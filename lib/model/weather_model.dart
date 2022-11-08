@@ -121,7 +121,7 @@ class Main {
   });
 
   factory Main.fromMap(Map<String, dynamic> json) => Main(
-        temp: json["temp"].toDouble(),
+        temp: (json["temp"].toDouble() - 273.15),
         feelsLike: json["feels_like"].toDouble(),
         tempMin: json["temp_min"].toDouble(),
         tempMax: json["temp_max"].toDouble(),

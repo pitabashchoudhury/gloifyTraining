@@ -5,5 +5,6 @@ abstract class WeatherblocEvent {
 }
 
 class WeatherEvent extends WeatherblocEvent {
-  WeatherEvent();
+  String? place;
+  WeatherEvent({this.place});
 }

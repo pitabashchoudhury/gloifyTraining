@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_location_weather_form/bloc/bloc/bloc/weatherbloc_bloc.dart';
-import 'package:flutter_location_weather_form/bloc/bloc/detail_bloc.dart';
+// import 'package:flutter_location_weather_form/bloc/bloc/detail_bloc.dart';
 import 'package:flutter_location_weather_form/model/weather_model.dart';
 import 'package:flutter_location_weather_form/repository/current_weather.dart';
 
@@ -93,10 +93,16 @@ class _DetailPageState extends State<DetailPage> {
                                 height: 5.0,
                               ),
                               currentWeather(
-                                  "${state.weather?.weather![0].icon}",
-                                  "${state.weather!.main!.temp?.toStringAsFixed(2)} °C",
-                                  "${state.weather?.name},${state.weather?.sys?.country}"),
-                              additionalInfo("257", "253", "5200", "523.2"),
+                                "${state.weather?.weather![0].icon}",
+                                "${state.weather!.main!.temp?.toStringAsFixed(2)} °C",
+                                "${state.weather?.name},${state.weather?.sys?.country}",
+                              ),
+                              additionalInfo(
+                                state.weather?.wind?.speed.toString(),
+                                state.weather?.main?.humidity.toString(),
+                                state.weather?.main?.pressure.toString(),
+                                state.weather?.main?.feelsLike.toString(),
+                              ),
                             ],
                           ),
                         ),
@@ -131,19 +137,6 @@ class _DetailPageState extends State<DetailPage> {
                   );
                 },
               ),
-              const Text(
-                // currentLocation(),
-                "PITABASH",
-              ),
-              OutlinedButton(
-                onPressed: () async {
-                  weather = await client.getCurrentWeather("bengaluru");
-                  print(weather!.main?.temp);
-                },
-                child: const Text(
-                  "data",
-                ),
-              )
             ],
           ),
         ),

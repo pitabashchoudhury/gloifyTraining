@@ -202,7 +202,8 @@ class _HomePageState extends State<HomePage> {
                                     }
                                     if (permission ==
                                         LocationPermission.whileInUse) {
-                                      String k = await currentLocation();
+                                      // ignore: use_build_context_synchronously
+                                      String k = await currentLocation(context);
 
                                       setState(() {
                                         location = k;
@@ -261,9 +262,9 @@ class _HomePageState extends State<HomePage> {
                                           location: location,
                                         ),
                                       );
-                                  context.read<WeatherblocBloc>().add(
-                                        WeatherEvent(),
-                                      );
+                                  // context.read<WeatherblocBloc>().add(
+                                  //       WeatherEvent(),
+                                  //     );
                                 }
                               },
                               child: const Text('Insert'),
@@ -295,30 +296,25 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               );
                             },
-                            child:
-                                BlocBuilder<WeatherblocBloc, WeatherblocState>(
-                              builder: (context, state) {
-                                return Container(
-                                  width: width / 2,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      width: 1,
-                                      color: Colors.transparent,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
+                            child: Container(
+                              width: width / 2,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 1,
+                                  color: Colors.transparent,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  "See Details",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  child: Center(
-                                    child: Text(
-                                      state.weather!.main!.pressure.toString(),
-                                      style: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
+                                ),
+                              ),
                             ),
                           ),
                         ],
