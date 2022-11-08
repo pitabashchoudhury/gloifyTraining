@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_location_weather_form/bloc/bloc/bloc/weatherbloc_bloc.dart';
 import 'package:flutter_location_weather_form/bloc/bloc/detail_bloc.dart';
+// import 'package:flutter_location_weather_form/screen/detail_page.dart';
 import 'package:flutter_location_weather_form/screen/home_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    const MyApp(),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -19,16 +23,25 @@ class _MyAppState extends State<MyApp> {
   void dispose() {
     super.dispose();
     DetailBloc().close();
+    WeatherblocBloc().close();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => DetailBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => DetailBloc(),
+        ),
+        BlocProvider(
+          create: (context) => WeatherblocBloc(),
+        ),
+      ],
       child: const MaterialApp(
         title: 'My Portal',
         debugShowCheckedModeBanner: false,
         home: HomePage(),
+        // home: DetailPage(),
       ),
     );
   }

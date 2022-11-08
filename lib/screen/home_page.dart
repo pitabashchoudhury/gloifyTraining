@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_location_weather_form/bloc/bloc/bloc/weatherbloc_bloc.dart';
 import 'package:flutter_location_weather_form/bloc/bloc/detail_bloc.dart';
 import 'package:flutter_location_weather_form/repository/current_location.dart';
 import 'package:flutter_location_weather_form/screen/detail_page.dart';
@@ -18,12 +19,12 @@ class _HomePageState extends State<HomePage> {
   String? _chosenValue;
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  String? location = '';
-  @override
-  void initState() {
-    super.initState();
-    location = "Tap on Icon to fetch location";
-  }
+  String? location = 'Tap on Icon to fetch location';
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // location = "Tap on Icon to fetch location";
+  // }
 
   @override
   void dispose() {
@@ -57,13 +58,8 @@ class _HomePageState extends State<HomePage> {
         ),
         body: SingleChildScrollView(
           child: SizedBox(
-            // height: height,
             width: width,
             child: Column(
-              // direction: Axis.vertical,
-              // crossAxisAlignment: WrapCrossAlignment.center,
-              // alignment: WrapAlignment.start,
-              // runAlignment: WrapAlignment.center,
               children: <Widget>[
                 const Padding(
                   padding: EdgeInsets.all(10.0),
@@ -265,6 +261,9 @@ class _HomePageState extends State<HomePage> {
                                           location: location,
                                         ),
                                       );
+                                  context.read<WeatherblocBloc>().add(
+                                        WeatherEvent(),
+                                      );
                                 }
                               },
                               child: const Text('Insert'),
@@ -296,7 +295,8 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               );
                             },
-                            child: BlocBuilder<DetailBloc, DetailState>(
+                            child:
+                                BlocBuilder<WeatherblocBloc, WeatherblocState>(
                               builder: (context, state) {
                                 return Container(
                                   width: width / 2,
@@ -310,7 +310,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      state.movie.toString(),
+                                      state.weather!.main!.pressure.toString(),
                                       style: const TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold,
