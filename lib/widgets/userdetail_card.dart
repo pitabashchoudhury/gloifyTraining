@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 Widget userInfo(
     double width, String image, String name, String email, String movie) {
@@ -54,24 +55,33 @@ Widget userInfo(
                   children: <Widget>[
                     Text(
                       name,
-                      style: const TextStyle(
-                        color: Colors.deepOrange,
+                      style: GoogleFonts.sacramento(
+                        fontSize: 24,
                         fontWeight: FontWeight.w700,
-                        fontSize: 18,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.deepOrange,
                       ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       email,
-                      style: const TextStyle(
+                      style: GoogleFonts.getFont(
+                        'Lato',
                         color: Colors.orangeAccent,
                         fontWeight: FontWeight.normal,
+                        fontSize: 16,
+                        letterSpacing: 0.0,
+                        wordSpacing: 0.0,
                       ),
                     ),
                     Text(
                       "Fav Genre: $movie",
-                      style: const TextStyle(
+                      style: GoogleFonts.alegreyaSans(
                         color: Colors.green,
                         fontWeight: FontWeight.normal,
+                        fontSize: 16,
+                        letterSpacing: 0.0,
+                        wordSpacing: 0.0,
                       ),
                     ),
                   ],
