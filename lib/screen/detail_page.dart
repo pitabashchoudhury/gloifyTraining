@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_location_weather_form/bloc/bloc/bloc/weatherbloc_bloc.dart';
@@ -18,13 +20,24 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-  Weather? weather = Weather();
-  WeatherClient client = WeatherClient();
+  String? place;
+  late Timer _clockTimer;
+  @override
+  void initState() {
+    super.initState();
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  // }
+    _clockTimer = Timer.periodic(const Duration(minutes: 2), ((timer) {
+      context.read<WeatherblocBloc>().add(
+            WeatherEvent(place: place),
+          );
+    }));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _clockTimer.cancel();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +68,7 @@ class _DetailPageState extends State<DetailPage> {
               ),
               BlocBuilder<WeatherblocBloc, WeatherblocState>(
                 builder: (context, state) {
+                  place = state.weather?.name;
                   return Stack(
                     fit: StackFit.passthrough,
                     children: <Widget>[
@@ -139,6 +153,17 @@ class _DetailPageState extends State<DetailPage> {
                   );
                 },
               ),
+
+              // ElevatedButton(
+              //   onPressed: () {
+              //     context.read<WeatherblocBloc>().add(
+              //           WeatherEvent(place: place),
+              //         );
+              //   },
+              //   child: const Text(
+              //     "ok",
+              //   ),
+              // ),
 
               BlocBuilder<DetailBloc, DetailState>(
                 builder: (context, state) {
