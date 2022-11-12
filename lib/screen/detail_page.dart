@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_location_weather_form/bloc/bloc/bloc/weatherbloc_bloc.dart';
 import 'package:flutter_location_weather_form/bloc/bloc/detail_bloc.dart';
 // import 'package:flutter_location_weather_form/bloc/bloc/detail_bloc.dart';
-import 'package:flutter_location_weather_form/model/weather_model.dart';
-import 'package:flutter_location_weather_form/repository/current_weather.dart';
+// import 'package:flutter_location_weather_form/model/weather_model.dart';
+// import 'package:flutter_location_weather_form/repository/current_weather.dart';
 import 'package:flutter_location_weather_form/widgets/userdetail_card.dart';
 
 import '../widgets/additional_info.dart';
