@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_location_weather_form/bloc/bloc/bloc/weatherbloc_bloc.dart';
 import 'package:flutter_location_weather_form/bloc/bloc/detail_bloc.dart';
 import 'package:flutter_location_weather_form/repository/current_location.dart';
 import 'package:flutter_location_weather_form/screen/detail_page.dart';

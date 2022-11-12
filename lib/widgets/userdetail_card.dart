@@ -65,11 +65,10 @@ Widget userInfo(
                     ),
                     Text(
                       email,
-                      style: GoogleFonts.getFont(
-                        'Lato',
+                      style: GoogleFonts.alegreyaSans(
                         color: Colors.orangeAccent,
                         fontWeight: FontWeight.normal,
-                        fontSize: 16,
+                        fontSize: 15,
                         letterSpacing: 0.0,
                         wordSpacing: 0.0,
                       ),
@@ -79,7 +78,7 @@ Widget userInfo(
                       style: GoogleFonts.alegreyaSans(
                         color: Colors.green,
                         fontWeight: FontWeight.normal,
-                        fontSize: 16,
+                        fontSize: 15,
                         letterSpacing: 0.0,
                         wordSpacing: 0.0,
                       ),
