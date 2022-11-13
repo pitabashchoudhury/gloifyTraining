@@ -26,7 +26,7 @@ class _DetailPageState extends State<DetailPage> {
   void initState() {
     super.initState();
 
-    _clockTimer = Timer.periodic(const Duration(minutes: 2), ((timer) {
+    _clockTimer = Timer.periodic(const Duration(minutes: 15), ((timer) {
       context.read<WeatherblocBloc>().add(
             WeatherEvent(place: place),
           );
