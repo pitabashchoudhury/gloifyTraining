@@ -19,6 +19,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   // final MqttServerClient client =
   //     MqttServerClient('a1q54soguztrms-ats.iot.us-west-2.amazonaws.com', '');
+  var client = MqttServerClient(
+    't1ce993a.us-east-1.emqx.cloud',
+    'web',
+  );
 
   String? msg = "not connected";
   @override
@@ -62,6 +66,14 @@ class _MyAppState extends State<MyApp> {
                   Text(
                     msg!,
                   ),
+                  TextButton(
+                    onPressed: () async {
+                      disconnect();
+                    },
+                    child: const Text(
+                      'Disconnect',
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -70,63 +82,66 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
-}
 
-void connect() async {
-  //'ws://t1ce993a.us-east-1.emqx.cloud',
-  try {
-    var client = MqttServerClient(
-      't1ce993a.us-east-1.emqx.cloud',
-      'web',
-    );
-
-    client.logging(on: false);
-    client.keepAlivePeriod = 60;
-    client.port = 15600;
-    client.onConnected = onConnected;
-    client.onDisconnected = onDisconnected;
-    client.pongCallback = pong;
-
-    //client.setProtocolV311();
-    // final MqttConnectMessage connMess = MqttConnectMessage().startClean();
-    // client.connectionMessage = connMess;
-    final connMess = MqttConnectMessage()
-        .authenticateAs('pitabashc98', 'pitabashc98')
-        .startClean()
-        .withWillQos(MqttQos.atLeastOnce);
-    print('EXAMPLE::Mosquitto client connecting....');
-
-    client.connectionMessage = connMess;
-
+  void connect() async {
+    //'ws://t1ce993a.us-east-1.emqx.cloud',
     try {
-      await client.connect();
-    } on Exception catch (e) {
-      print('EXAMPLE::client exception - $e');
-      client.disconnect();
-    }
-    if (client.connectionStatus!.state == MqttConnectionState.connected) {
-      print("Connected to AWS Successfully!");
-    } else {
-      print("failed");
+      client.logging(on: false);
+      client.keepAlivePeriod = 60;
+      client.port = 15600;
+      client.onConnected = onConnected;
+      client.onDisconnected = onDisconnected;
+      client.pongCallback = pong;
+
+      //client.setProtocolV311();
+      // final MqttConnectMessage connMess = MqttConnectMessage().startClean();
+      // client.connectionMessage = connMess;
+      final connMess = MqttConnectMessage()
+          .authenticateAs('pitabashc98', 'pitabashc98')
+          .startClean()
+          .withWillQos(MqttQos.atLeastOnce);
+      print('EXAMPLE::Mosquitto client connecting....');
+
+      client.connectionMessage = connMess;
+
+      try {
+        await client.connect();
+      } on Exception catch (e) {
+        print('EXAMPLE::client exception - $e');
+        client.disconnect();
+      }
+      if (client.connectionStatus!.state == MqttConnectionState.connected) {
+        print("Connected to AWS Successfully!");
+      } else {
+        print("failed");
+      }
+
+      const topic = 'test';
+      client.subscribe(topic, MqttQos.atMostOnce);
+    } catch (e) {
+      print(e.toString());
     }
 
-    const topic = 'test';
-    client.subscribe(topic, MqttQos.atMostOnce);
-  } catch (e) {
-    print(e.toString());
+    // return "bubu";
   }
 
-  // return "bubu";
-}
+  void onConnected() {
+    setState(() {
+      msg = "connected";
+    });
+  }
 
-void onConnected() {
-  print("connection successful");
-}
+  void onDisconnected() {
+    setState(() {
+      msg = "disconnected";
+    });
+  }
 
-void onDisconnected() {
-  print("disconnected");
-}
+  void pong() {
+    print("ponged");
+  }
 
-void pong() {
-  print("ponged");
+  void disconnect() {
+    client.disconnect();
+  }
 }
