@@ -1,7 +1,4 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
@@ -27,6 +24,13 @@ class _MyAppState extends State<MyApp> {
   );
 
   String? msg = "not connected";
+
+  @override
+  void dispose() {
+    super.dispose();
+    client.disconnect();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -88,6 +92,7 @@ class _MyAppState extends State<MyApp> {
 
   void connect() async {
     //'ws://t1ce993a.us-east-1.emqx.cloud',
+
     try {
       client.logging(on: false);
       client.keepAlivePeriod = 60;
@@ -100,6 +105,7 @@ class _MyAppState extends State<MyApp> {
       // final MqttConnectMessage connMess = MqttConnectMessage().startClean();
       // client.connectionMessage = connMess;
       final connMess = MqttConnectMessage()
+          .withClientIdentifier('bubu')
           .authenticateAs('pitabashc98', 'pitabashc98')
           .startClean()
           .withWillQos(MqttQos.atLeastOnce);
@@ -114,7 +120,7 @@ class _MyAppState extends State<MyApp> {
         client.disconnect();
       }
       if (client.connectionStatus!.state == MqttConnectionState.connected) {
-        print("Connected to AWS Successfully!");
+        print("Connected to EMQX cloud Successfully!");
       } else {
         print("failed");
       }
@@ -179,9 +185,21 @@ class _MyAppState extends State<MyApp> {
                 recMess.payload.message);
 
             return Container(
-              child: (Text(
-                message,
-              )),
+              width: 100,
+              height: 30,
+              decoration: BoxDecoration(
+                color: Colors.greenAccent,
+                border: Border.all(
+                  width: 1.0,
+                  color: Colors.black38,
+                ),
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              child: Center(
+                child: (Text(
+                  message,
+                )),
+              ),
             );
           }
         },
