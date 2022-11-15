@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:mqtt_client/mqtt_client.dart';
@@ -21,7 +23,7 @@ class _MyAppState extends State<MyApp> {
   //     MqttServerClient('a1q54soguztrms-ats.iot.us-west-2.amazonaws.com', '');
   var client = MqttServerClient(
     't1ce993a.us-east-1.emqx.cloud',
-    'web',
+    '',
   );
 
   String? msg = "not connected";
@@ -55,6 +57,7 @@ class _MyAppState extends State<MyApp> {
                   const SizedBox(
                     height: 10,
                   ),
+                  bodySteam(),
                   TextButton(
                     onPressed: () async {
                       connect();
@@ -118,8 +121,17 @@ class _MyAppState extends State<MyApp> {
 
       const topic = 'test';
       client.subscribe(topic, MqttQos.atMostOnce);
+
+      // client.updates?.listen((List<MqttReceivedMessage<MqttMessage>>? c) {
+      //   final recMess = c![0].payload as MqttPublishMessage;
+      //   final message =
+      //       MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+
+      //   print(message.toString());
+      // });
+
     } catch (e) {
-      print(e.toString());
+      print("error");
     }
 
     // return "bubu";
@@ -143,5 +155,37 @@ class _MyAppState extends State<MyApp> {
 
   void disconnect() {
     client.disconnect();
+  }
+
+  Widget bodySteam() {
+    return Container(
+      color: Colors.white,
+      child: StreamBuilder(
+        stream: client.updates,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
+            );
+          } else {
+            final mqttReceivedMessages =
+                snapshot.data as List<MqttReceivedMessage<MqttMessage>>;
+
+            final recMess =
+                mqttReceivedMessages[0].payload as MqttPublishMessage;
+            final message = MqttPublishPayload.bytesToStringAsString(
+                recMess.payload.message);
+
+            return Container(
+              child: (Text(
+                message,
+              )),
+            );
+          }
+        },
+      ),
+    );
   }
 }
