@@ -1,209 +1,114 @@
 import 'package:flutter/material.dart';
-import 'package:mqtt_client/mqtt_client.dart';
-import 'package:mqtt_client/mqtt_server_client.dart';
 
-void main() {
-  runApp(
-    const MyApp(),
-  );
-}
+void main() => runApp(const FlowApp());
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  // final MqttServerClient client =
-  //     MqttServerClient('a1q54soguztrms-ats.iot.us-west-2.amazonaws.com', '');
-  var client = MqttServerClient(
-    't1ce993a.us-east-1.emqx.cloud',
-    '',
-  );
-
-  String? msg = "not connected";
-
-  @override
-  void dispose() {
-    super.dispose();
-    client.disconnect();
-  }
+class FlowApp extends StatelessWidget {
+  const FlowApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Mqtt',
-      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'MQTT Protocol',
+          backgroundColor: Colors.orange,
+          title: const Text('Flow Example'),
+        ),
+        body: const Center(
+          child: Text(
+            "Flow Widgets",
           ),
+        ),
+        floatingActionButton: const FlowMenu(),
+      ),
+    );
+  }
+}
+
+class FlowMenu extends StatefulWidget {
+  const FlowMenu({super.key});
+
+  @override
+  State<FlowMenu> createState() => _FlowMenuState();
+}
+
+class _FlowMenuState extends State<FlowMenu>
+    with SingleTickerProviderStateMixin {
+  late AnimationController controller;
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      duration: const Duration(
+        milliseconds: 300,
+      ),
+      vsync: this,
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Flow(
+      delegate: FlowMenuDelegate(controller: controller),
+      children: <IconData>[
+        Icons.menu,
+        Icons.mail,
+        Icons.call,
+        Icons.notifications,
+      ].map<Widget>(buildItem).toList(),
+    );
+  }
+
+  Widget buildItem(IconData icon) => SizedBox(
+        width: 50,
+        height: 50,
+        child: FloatingActionButton(
           elevation: 0.0,
-          centerTitle: true,
-        ),
-        body: SafeArea(
-          child: Center(
-            child: Container(
-              width: 300,
-              height: 300,
-              color: Colors.amberAccent,
-              child: Column(
-                children: <Widget>[
-                  const SizedBox(
-                    height: 80,
-                  ),
-                  const Text(
-                    'WEl COME',
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  bodySteam(),
-                  TextButton(
-                    onPressed: () async {
-                      connect();
-                    },
-                    child: const Text(
-                      'connect',
-                    ),
-                  ),
-                  Text(
-                    msg!,
-                  ),
-                  TextButton(
-                    onPressed: () async {
-                      disconnect();
-                    },
-                    child: const Text(
-                      'Disconnect',
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          splashColor: Colors.black,
+          child: Icon(
+            icon,
+            color: Colors.white,
+            size: 25,
           ),
+          onPressed: () {
+            if (controller.status == AnimationStatus.completed) {
+              controller.reverse();
+            } else {
+              controller.forward();
+            }
+          },
         ),
-      ),
-    );
-  }
+      );
+}
 
-  void connect() async {
-    //'ws://t1ce993a.us-east-1.emqx.cloud',
+class FlowMenuDelegate extends FlowDelegate {
+  final Animation<double> controller;
+  const FlowMenuDelegate({required this.controller})
+      : super(repaint: controller);
+  @override
+  void paintChildren(FlowPaintingContext context) {
+    final size = context.size;
+    final xStart = size.width - 50.0;
+    final yStart = size.height - 50.0;
+    for (int i = context.childCount - 1; i >= 0; i--) {
+      const margin = 8;
+      final childSize = context.getChildSize(i)!.width;
+      final dx = (childSize + margin) * i;
 
-    try {
-      client.logging(on: false);
-      client.keepAlivePeriod = 60;
-      client.port = 15600;
-      client.onConnected = onConnected;
-      client.onDisconnected = onDisconnected;
-      client.pongCallback = pong;
-
-      //client.setProtocolV311();
-      // final MqttConnectMessage connMess = MqttConnectMessage().startClean();
-      // client.connectionMessage = connMess;
-      final connMess = MqttConnectMessage()
-          .withClientIdentifier('bubu')
-          .authenticateAs('pitabashc98', 'pitabashc98')
-          .startClean()
-          .withWillQos(MqttQos.atLeastOnce);
-      print('EXAMPLE::Mosquitto client connecting....');
-
-      client.connectionMessage = connMess;
-
-      try {
-        await client.connect();
-      } on Exception catch (e) {
-        print('EXAMPLE::client exception - $e');
-        client.disconnect();
-      }
-      if (client.connectionStatus!.state == MqttConnectionState.connected) {
-        print("Connected to EMQX cloud Successfully!");
-      } else {
-        print("failed");
-      }
-
-      const topic = 'test';
-      client.subscribe(topic, MqttQos.atMostOnce);
-
-      // client.updates?.listen((List<MqttReceivedMessage<MqttMessage>>? c) {
-      //   final recMess = c![0].payload as MqttPublishMessage;
-      //   final message =
-      //       MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-
-      //   print(message.toString());
-      // });
-
-    } catch (e) {
-      print("error");
+      final x = xStart - dx * 1 * controller.value;
+      final y = yStart - dx * 1 * controller.value;
+      context.paintChild(
+        i,
+        transform: Matrix4.translationValues(x, y, 0),
+      );
     }
-
-    // return "bubu";
   }
 
-  void onConnected() {
-    setState(() {
-      msg = "connected";
-    });
-  }
-
-  void onDisconnected() {
-    setState(() {
-      msg = "disconnected";
-    });
-  }
-
-  void pong() {
-    print("ponged");
-  }
-
-  void disconnect() {
-    client.disconnect();
-  }
-
-  Widget bodySteam() {
-    return Container(
-      color: Colors.white,
-      child: StreamBuilder(
-        stream: client.updates,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-              ),
-            );
-          } else {
-            final mqttReceivedMessages =
-                snapshot.data as List<MqttReceivedMessage<MqttMessage>>;
-
-            final recMess =
-                mqttReceivedMessages[0].payload as MqttPublishMessage;
-            final message = MqttPublishPayload.bytesToStringAsString(
-                recMess.payload.message);
-
-            return Container(
-              width: 100,
-              height: 30,
-              decoration: BoxDecoration(
-                color: Colors.greenAccent,
-                border: Border.all(
-                  width: 1.0,
-                  color: Colors.black38,
-                ),
-                borderRadius: BorderRadius.circular(5.0),
-              ),
-              child: Center(
-                child: (Text(
-                  message,
-                )),
-              ),
-            );
-          }
-        },
-      ),
-    );
-  }
+  @override
+  bool shouldRepaint(covariant FlowDelegate oldDelegate) => false;
 }
