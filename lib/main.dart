@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:quickalert/quickalert.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(const FlowApp());
 
@@ -57,33 +59,64 @@ class _FlowMenuState extends State<FlowMenu>
       delegate: FlowMenuDelegate(controller: controller),
       children: <IconData>[
         Icons.menu,
-        Icons.mail,
+        Icons.chrome_reader_mode,
         Icons.call,
-        Icons.notifications,
-      ].map<Widget>(buildItem).toList(),
+        Icons.facebook,
+      ].map<Widget>((IconData icon) => buildItem(icon)).toList(),
     );
   }
 
-  Widget buildItem(IconData icon) => SizedBox(
-        width: 50,
-        height: 50,
-        child: FloatingActionButton(
-          elevation: 0.0,
-          splashColor: Colors.black,
-          child: Icon(
-            icon,
-            color: Colors.white,
-            size: 25,
-          ),
-          onPressed: () {
-            if (controller.status == AnimationStatus.completed) {
-              controller.reverse();
-            } else {
-              controller.forward();
-            }
-          },
+  Widget buildItem(IconData icon) {
+    return SizedBox(
+      width: 50,
+      height: 50,
+      child: FloatingActionButton(
+        elevation: 0.0,
+        splashColor: Colors.black,
+        child: Icon(
+          icon,
+          color: Colors.white,
+          size: 25,
         ),
-      );
+        onPressed: () async {
+          if (icon == Icons.chrome_reader_mode) {
+            // QuickAlert.show(
+            //     context: context,
+            //     type: QuickAlertType.error,
+            //     title: 'Welcome',
+            //     text: "This is Email Icon");
+            await launchUrl(
+              Uri.parse('https://www.google.com/'),
+            );
+          } else if (icon == Icons.call) {
+            QuickAlert.show(
+                context: context,
+                type: QuickAlertType.success,
+                title: 'Welcome',
+                text: "This is Call Icon");
+          } else if (icon == Icons.facebook) {
+            // launchUrl(
+            //   Uri.parse('https://www.facebook.com/'),
+            // );
+            await launchUrl(
+              Uri.parse('https://www.facebook.com/'),
+            );
+            //   QuickAlert.show(
+            //       context: context,
+            //       type: QuickAlertType.info,
+            //       title: 'Welcome',
+            //       text: "This is Notification Icon");
+          }
+
+          if (controller.status == AnimationStatus.completed) {
+            controller.reverse();
+          } else {
+            controller.forward();
+          }
+        },
+      ),
+    );
+  }
 }
 
 class FlowMenuDelegate extends FlowDelegate {
