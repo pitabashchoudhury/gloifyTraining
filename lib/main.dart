@@ -36,6 +36,7 @@ class FlowMenu extends StatefulWidget {
 class _FlowMenuState extends State<FlowMenu>
     with SingleTickerProviderStateMixin {
   late AnimationController controller;
+
   @override
   void initState() {
     super.initState();
@@ -85,6 +86,7 @@ class _FlowMenuState extends State<FlowMenu>
             //     type: QuickAlertType.error,
             //     title: 'Welcome',
             //     text: "This is Email Icon");
+
             await launchUrl(
               Uri.parse('https://www.google.com/'),
             );
